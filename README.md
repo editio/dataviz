@@ -11,6 +11,10 @@
 
 Una versión de estos archivos se ha depositado en Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3252981.svg)](https://doi.org/10.5281/zenodo.3252981)
 
+### Instancia de Rstudio en línea
+
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/editio/dataviz/master?urlpath=rstudio)
+
 
 ### Licencia 
 
