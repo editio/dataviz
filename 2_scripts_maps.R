@@ -10,36 +10,43 @@
 # -- 2_scripts_maps.R -- #
 # -- Aquí solo se recoge el código de forma esquemática -- #  
 
-# rm(list = ls()) # Limpia los datos de la sesión
+rm(list = ls()) # Limpia los datos de la sesión
 
 # ¿En otra sesión? Cargue las librerías y los datos
 
 library(tidyverse)
-bibliostylo = read.csv("stylometry_sample.csv", encoding = "UTF-8")
+bibliostylo = read.csv("stylometry_sample.csv", encoding = "UTF-8", stringsAsFactors=F)
 
 ## Lugares----
 
-bibliostylo$Place
+# Conocer la estructura de los datos: 
+# Pipe %>%
+
+
 
 lugares = bibliostylo %>%              # Asignamos la variable
   select(Place) %>%                    # Seleccionamos los lugares
-  na_if("") %>%                        # Comprobamos si algunos están vacíos
+  na_if("") %>%                        # Comprobamos si algunos están vacíos (¿revistas?)
   na.omit() %>%                        # Eliminamos los vacíos
   separate_rows(sep = "/", Place) %>%  # Separamos las observaciones que tengan
   separate_rows(sep = "&", Place) %>%
   separate_rows(sep = ";", Place) %>%  
   separate_rows(sep = "-", Place)
 
+
 lugares[1:14,]
 
-lugares = data.frame(lapply(lugares, str_trim))
-lugares = count(lugares, Place)
+lugares = data.frame(lapply(lugares, str_trim)) # limpiar espacios.
+lugares = count(lugares, Place) # contamos 
 
 # Exportarlo fuera de R----
 
 write.csv(lugares, file = "lugares_estilometria.csv") 
 
 ## Cargar lugares georreferenciados
+library(georeference)
+
+georef("Rome")
 
 geolugares = read.csv("geo_lugares_estilometria.csv")
 geolugares[1:5,]
@@ -52,11 +59,12 @@ library(leaflet)
 # mapa 1
 
 leaflet() %>%
-  addTiles() %>%
-  addCircleMarkers(geolugares$lon, geolugares$lat, label = geolugares$Place)
+  addTiles() %>% # Representación del territorio
+  addCircleMarkers(geolugares$lon, geolugares$lat, label = geolugares$Place) # Indicadores de posición.
 
 
 # mapa 2
+# Frecuencias.
 
 leaflet() %>%
   addTiles() %>%
@@ -64,8 +72,10 @@ leaflet() %>%
                    geolugares$lat, 
                    label = geolugares$Place, 
                    radius = geolugares$n*2)   %>%
-  addControl("Lugares de publicación de Bibliography on Stylometry")
+  addControl("Lugares de publicación «Bibliography on Stylometry»")
 
+
+# https://editio.github.io/mapping.literature
 
 ## Extra. Automatizar la geolocalización----
 
