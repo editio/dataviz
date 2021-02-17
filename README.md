@@ -9,7 +9,7 @@
 
 ### Zenodo
 
-Una versión de estos archivos se ha depositado en Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3252981.svg)](https://doi.org/10.5281/zenodo.3252981)
+Una versión de estos archivos se ha depositado en Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3629772.svg)](https://doi.org/10.5281/zenodo.3629772)
 
 ### Instancia de Rstudio en línea
 
