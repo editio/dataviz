@@ -1,6 +1,6 @@
 
       # -- José Luis Losada Palenzuela -- #
-                # -- 2020 -- #
+                # -- 2021 -- #
 
 ### ------------------------------------------- ###
 ###         Código para el curso de             ###
@@ -22,8 +22,6 @@ bibliostylo = read.csv("stylometry_sample.csv", encoding = "UTF-8", stringsAsFac
 # Conocer la estructura de los datos: 
 # Pipe %>%
 
-
-
 lugares = bibliostylo %>%              # Asignamos la variable
   select(Place) %>%                    # Seleccionamos los lugares
   na_if("") %>%                        # Comprobamos si algunos están vacíos (¿revistas?)
@@ -37,16 +35,14 @@ lugares = bibliostylo %>%              # Asignamos la variable
 lugares[1:14,]
 
 lugares = data.frame(lapply(lugares, str_trim)) # limpiar espacios.
-lugares = count(lugares, Place) # contamos 
+
+lugares = dplyr::count(lugares, Place) # contamos. Atención a los namespaces
 
 # Exportarlo fuera de R----
 
 write.csv(lugares, file = "lugares_estilometria.csv") 
 
 ## Cargar lugares georreferenciados
-library(georeference)
-
-georef("Rome")
 
 geolugares = read.csv("geo_lugares_estilometria.csv")
 geolugares[1:5,]
@@ -60,7 +56,10 @@ library(leaflet)
 
 leaflet() %>%
   addTiles() %>% # Representación del territorio
-  addCircleMarkers(geolugares$lon, geolugares$lat, label = geolugares$Place) # Indicadores de posición.
+  addCircleMarkers(
+    geolugares$lon, 
+    geolugares$lat, 
+    label = geolugares$Place) # Indicadores de posición.
 
 
 # mapa 2
@@ -74,7 +73,25 @@ leaflet() %>%
                    radius = geolugares$n*2)   %>%
   addControl("Lugares de publicación «Bibliography on Stylometry»")
 
+# Mapa 3 con ggplot2
 
+library(ggplot2)
+# install.packages("maps")
+library(maps)
+
+ggplot() +
+  borders("world", fill = "lightsteelblue") +
+  geom_text(data = geolugares,
+            aes(x = lon, y = lat),
+            label = geolugares$Place)
+
+ggplot(geolugares, aes(lon, lat)) +
+  borders("world") +
+  geom_point(aes(size = n, colour = n)) +
+  coord_quickmap() +
+  theme_void()
+
+## Ejemplo de proyecto
 # https://editio.github.io/mapping.literature
 
 ## Extra. Automatizar la geolocalización----
@@ -90,6 +107,13 @@ typeof(lugares$Place)
 # Buscar en el diccionario geográfico (Pelagios)
 geolugares = georef(as.character(lugares$Place))
 
+# Buscar en el diccionario geográfico (GeoNames)
+# geolugares = georef(as.character(lugares$Place),  
+#                source = "geonames", 
+#                bounding.box ="43.7,-16.7,59.8,35.4", 
+#                inject = "username=geonames_account_id")
+
+
 leaflet() %>%
   addTiles() %>%
   addCircleMarkers(geolugares$lon, 
@@ -97,7 +121,7 @@ leaflet() %>%
                    label = geolugares$name)
 
 # Calcular las frecuencias
-geolugares_frq = count(geolugares)
+# geolugares_frq = plyr::count(geolugares)
 
 leaflet() %>%
   addTiles() %>%

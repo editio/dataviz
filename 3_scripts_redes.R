@@ -1,6 +1,6 @@
 
       # -- José Luis Losada Palenzuela -- #
-                # -- 2020 -- #
+                # -- 2021 -- #
 
 ### ------------------------------------------- ###
 ###         Código para el curso de             ###
@@ -10,12 +10,12 @@
 # -- 3_scripts_redes.R -- #
 # -- Aquí solo se recoge el código de forma esquemática -- #  
 
-# rm(list = ls()) # Limpia los datos de la sesión
+rm(list = ls()) # Limpia los datos de la sesión
 
 # ¿En otra sesión? Cargue las librerías y los datos
 
 library(tidyverse)
-bibliocurso = read.csv("asignatura_sample.csv", encoding = "UTF-8")
+bibliocurso = read.csv("asignatura_sample.csv", encoding = "UTF-8", stringsAsFactors=F)
 
 # Procesar los datos----
 
@@ -37,11 +37,9 @@ ggplot(edgelist) +
   aes(axis1 = Manual.Tags, axis2 = apellido) +  # En el eje horizontal
   geom_alluvium(aes(fill = Manual.Tags)) +    # Conexiones y color
   geom_stratum() +                            # Columnas
-  geom_text(stat = "stratum", label.strata = T) + # Texto y cálculo
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) + # Texto y cálculo
   theme_void() +
   theme(legend.position = "none")
-
-# New versions: geom_text(stat = "stratum", infer.label = T) 
 
 ## Crear un objeto de red----
 
@@ -90,12 +88,30 @@ plot(graph,
      vertex.label.color = "black"
 )
 
+## Ejemplo de proyecto
+# https://editio.github.io/mapping.literature/spatialnet.html
+
+
 ## Exportar los datos fuera de R----
 
+# Aristas y nodos por separado
 aristas = get.data.frame(graph, what = "edges")
 nodos = get.data.frame(graph, what = "vertices")
 
 write.csv(aristas, file = "aristas_biblio.csv") 
 write.csv(nodos, file = "nodos_biblio.csv") 
 
-write_graph(graph, "dataviz.gml", format = c("gml")) # Formato de Gephi
+# En formato gml (gephi)
+
+V(graph)$deg = deg # Añade el cálculo del degree al objeto graph
+
+write_graph(graph, "dataviz.gml", format = c("gml")) # Exporta en formato gml Gephi
+
+# En formato XML, gexf (gephi)
+
+library(rgexf)
+g1.gexf <- igraph.to.gexf(graph) # convierte el objeto graph a gexf
+
+f <- file("dataviz.gexf") # Crea el archivo y lo exporta.
+writeLines(g1.gexf$graph, con = f)
+close(f)
