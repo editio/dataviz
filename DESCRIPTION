@@ -7,10 +7,14 @@ Description: Using R for DataViz
 License: MIT
 Depends: 
     devtools,
+    dplyr,
     georeference,
     ggalluvial,
+    ggplot2,
     igraph,
     leaflet,
+    maps,
+    rgexf,
     roxygen2,
     stopwords,
     tidyverse,
@@ -18,8 +22,6 @@ Depends:
     treemapify,
     wordcloud
 Remotes: 
-    editio/georeference,
-    rstudio/leaflet,
-    wilkox/treemapify
+    editio/georeference
 Encoding: UTF-8
 LazyData: true
