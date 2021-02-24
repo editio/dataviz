@@ -1,0 +1,25 @@
+Type: Compendium
+Package: data_visualization_course
+Title: dataviz
+Version: 0.0.1
+Authors@R: https://github.com/editio
+Description: Using R for DataViz
+License: MIT
+Depends: 
+    dplyr,
+    georeference,
+    ggalluvial,
+    ggplot2,
+    igraph,
+    leaflet,
+    maps,
+    rgexf,
+    stopwords,
+    tidyverse,
+    tokenizers,
+    treemapify,
+    wordcloud
+Remotes: 
+    editio/georeference
+Encoding: UTF-8
+LazyData: true
