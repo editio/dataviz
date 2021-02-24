@@ -7,7 +7,6 @@ Description: Using R for DataViz
 License: MIT
 Depends: 
     dplyr,
-    georeference,
     ggalluvial,
     ggplot2,
     igraph,
@@ -19,7 +18,5 @@ Depends:
     tokenizers,
     treemapify,
     wordcloud
-Remotes: 
-    editio/georeference
 Encoding: UTF-8
 LazyData: true
